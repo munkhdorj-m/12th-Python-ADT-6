@@ -1,6 +1,7 @@
-# Linked List 1
+# Linked List
 
 Read the Abstract Data Types lecture (Linked List section) before you start.
+https://drive.google.com/file/d/1jXGQdSvuUYjGXl-PUuHMUzKWEBGQoARL/view?usp=sharing
 
 **Rules for this assignment**
 
@@ -17,7 +18,7 @@ Read the Abstract Data Types lecture (Linked List section) before you start.
 
 **The example linked list**
 
-Exercises 2–5 are tested on this list. Notice the data is **not** in order in
+Exercises 2–6 are tested on this list. Notice the data is **not** in order in
 the array — only the **pointers** give the order.
 
     Index   Data   Pointer
@@ -179,4 +180,43 @@ free nodes.
       [10, 20, 30, 40, 50]
 
 Node 1 is now `[50, -1]`, and node 4 (holding 40) changed from `[40, -1]` to `[40, 1]`.
+
+---
+
+## Exercise 6
+
+**Problem:**
+
+`Delete(Item)`
+
+Remove the node holding `Item` from the linked list. Return `True`, or `False`
+if `Item` is not in the list (and change nothing).
+
+1. Follow the pointers from `FirstNode`, remembering the **previous** node as
+   you go, until you find `Item` or reach `-1`
+2. Not found → return `False`
+3. If it is the **first** node → `FirstNode` moves to the next node
+4. Otherwise → the previous node's pointer **skips over** the deleted node
+5. Give the deleted node back to the **front** of the free list:
+   set its data to `-1`, point it to the old `FirstEmpty`, and make it the new `FirstEmpty`
+
+**Example (the example list):**
+
+    Input:
+      print(Delete(30))
+      print(Traverse())
+      print(FirstEmpty)
+
+    Output:
+      True
+      [10, 20, 40]
+      0
+
+What changed:
+
+    Index   Data   Pointer
+      0      -1       1      ← deleted node, now at the front of the free list
+      5      20       4      ← used to point to 0 (30), now skips to 4 (40)
+
+    Free list:  0 → 1 → 3 → 6 → 7
 
