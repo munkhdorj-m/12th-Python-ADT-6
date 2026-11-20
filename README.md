@@ -1,18 +1,37 @@
-# ADT 5 — Linear and Circular Queues
+# Linked List 1
 
-Read the Abstract Data Types lecture (Queue section) before you start.
-https://drive.google.com/file/d/1jXGQdSvuUYjGXl-PUuHMUzKWEBGQoARL/view?usp=sharing
+Read the Abstract Data Types lecture (Linked List section) before you start.
+
+**Rules for this assignment**
+
+- The linked list is stored in a **2D array** called `LinkedList`. Each node is
+  a list of two items: `[Data, Pointer]`.
+- A pointer is the **index of the next node**. A pointer of `-1` means
+  "points to nothing".
+- `FirstNode` is the index of the first node in the linked list.
+- `FirstEmpty` is the index of the first node in the **free list** (the empty nodes).
+- Functions **return** their answer — do not print.
+- Every function that changes `LinkedList`, `FirstNode` or `FirstEmpty` needs:
+  `global LinkedList, FirstNode, FirstEmpty`
 
 
-**The scenario**
+**The example linked list**
 
-A small bank has room for **5 customers inside**. Everyone else waits in a
-line **outside**.
+Exercises 2–5 are tested on this list. Notice the data is **not** in order in
+the array — only the **pointers** give the order.
 
-    OUTSIDE (linear queue, 8 places)        INSIDE (circular queue, 5 places)
-    ┌───┬───┬───┬───┬───┬───┬───┬───┐       ┌───┬───┬───┬───┬───┐
-    │ F │ G │   │   │   │   │   │   │  ──►  │ A │ B │ C │ D │ E │  ──► served
-    └───┴───┴───┴───┴───┴───┴───┴───┘       └───┴───┴───┴───┴───┘
+    Index   Data   Pointer
+      0      30       4
+      1      -1       3
+      2      10       5      ← FirstNode = 2
+      3      -1       6
+      4      40      -1
+      5      20       0
+      6      99       7      (old data — this node is in the free list)
+      7      -1      -1
+
+    FirstNode = 2       Linked list:  2 → 5 → 0 → 4        10, 20, 30, 40
+    FirstEmpty = 1      Free list:    1 → 3 → 6 → 7
 
 ---
 
@@ -20,53 +39,30 @@ line **outside**.
 
 **Problem:**
 
-Build the **linear queue** for the line outside.
+Set up an **empty** linked list with **8** nodes.
 
-Set up the queue:
+- `LinkedList` → a global 2D array of 8 nodes. Every node starts with data `-1`.
+  Each node points to the **next** node, and the last node points to `-1`.
+- `FirstNode` → `-1` (the linked list is empty)
+- `FirstEmpty` → `0` (every node is in the free list, starting at node 0)
 
-- `LinearQueue` → a global array of **8** elements, all set to `""` (empty string)
-- `LinearHead` and `LinearTail` → global integers, both set to `-1`
+The array must look like this:
 
-Then write three functions:
+    [[-1, 1], [-1, 2], [-1, 3], [-1, 4], [-1, 5], [-1, 6], [-1, 7], [-1, -1]]
 
-`LinearEnqueue(Name)`
+Then write two functions:
 
-- If the queue is full (`LinearTail` is 7), return `False`
-- Otherwise add 1 to `LinearTail`, store `Name` at `LinearQueue[LinearTail]`,
-  and return `True`
-- If this is the **first** item ever (`LinearHead` is -1), set `LinearHead` to 0
+`IsEmpty()`
 
-`LinearDequeue()`
+- Return `True` if the linked list has no nodes (`FirstNode` is `-1`), otherwise `False`
 
-- If the queue is empty (`LinearHead` is -1, or `LinearHead` is more than
-  `LinearTail`), return `""`
-- Otherwise return the name at `LinearQueue[LinearHead]`, and add 1 to `LinearHead`
+`IsFull()`
 
-`LinearCount()`
+- Return `True` if there are no free nodes left (`FirstEmpty` is `-1`), otherwise `False`
 
-- Return how many names are waiting in the queue, using **only** `LinearHead`
-  and `LinearTail`
-- Return `0` if nothing was ever added
-
-**Example:**
-
-    Input:
-      LinearEnqueue("Bat")
-      LinearEnqueue("Saraa")
-      LinearEnqueue("Anu")
-      print(LinearCount())
-      print(LinearDequeue())
-      print(LinearCount())
-      print(LinearHead, LinearTail)
-
-    Output:
-      3
-      Bat
-      2
-      1 2
-
-*Hint:* if `LinearHead` is 1 and `LinearTail` is 2, the items are at index 1
-and index 2 — that is **2** items, not 1. Check your sum with the example.
+**Careful:** build the array with a loop and `.append()`. Do **not** write
+`[[-1, -1]] * 8` — that makes 8 copies of the **same** row, so changing one
+row changes all of them.
 
 ---
 
@@ -74,68 +70,26 @@ and index 2 — that is **2** items, not 1. Check your sum with the example.
 
 **Problem:**
 
-Build the **circular queue** for the people inside.
+`Traverse()`
 
-Set up the queue:
+Return a list of the data in the linked list, **in linked-list order**.
+Return `[]` if the list is empty. Do **not** change the linked list.
 
-- `CircularQueue` → a global array of **5** elements, all set to `""`
-- `CircularHead` and `CircularTail` → global integers, both set to `-1`
-- `NumberItems` → a global integer, set to `0`
+1. Start at `FirstNode`
+2. While the current pointer is not `-1`:
+    - add the data of the current node to your answer
+    - move to the next node: `Current = LinkedList[Current][1]`
 
-Then write three functions:
-
-`CircularEnqueue(Name)`
-
-- If the queue is full (`NumberItems` is 5), return `False`
-- If the queue is empty, set `CircularHead` and `CircularTail` to 0
-- Otherwise add 1 to `CircularTail` — and if it reaches **5**, set it back to **0**
-- Store `Name` at `CircularQueue[CircularTail]`, add 1 to `NumberItems`, return `True`
-
-`CircularDequeue()`
-
-- If the queue is empty (`NumberItems` is 0), return `""`
-- Otherwise read the name at `CircularQueue[CircularHead]`
-- Add 1 to `CircularHead` — and if it reaches **5**, set it back to **0**
-- Take 1 off `NumberItems`
-- If the queue is now empty, set `CircularHead` and `CircularTail` back to `-1`
-- Return the name
-
-`GetItem(Position)`
-
-- Return the name at `Position` places from the **front** of the queue
-  (`Position` 0 is the front)
-- If there is no item at that position, return `""`
-- Do **not** change the queue
-
-**Example:**
+**Example (the example list):**
 
     Input:
-      Enqueue A, B, C, D, E
-      CircularDequeue()
-      CircularDequeue()
-      CircularDequeue()
-      CircularEnqueue("F")
-      CircularEnqueue("G")
-      print(CircularHead, CircularTail)
-      print(GetItem(0), GetItem(2), GetItem(3))
-      print(GetItem(4))
+      print(Traverse())
 
     Output:
-      3 1
-      D F G
-      ""
+      [10, 20, 30, 40]
 
-What the array looks like:
-
-    index:           0    1    2    3    4
-    CircularQueue: [ F    G    C    D    E ]
-                         ↑              ↑
-                    CircularTail   CircularHead
-
-    Queue order:  D (pos 0)   E (pos 1)   F (pos 2)   G (pos 3)
-
-*Hint:* the item at `Position` is at index `CircularHead + Position` — but
-if that goes past the end of the array, it must wrap back to the start.
+*Hint:* if your answer is `[30, 10, 40, 20, 99]` you are reading the array
+from top to bottom. Follow the **pointers** instead.
 
 ---
 
@@ -143,50 +97,86 @@ if that goes past the end of the array, it must wrap back to the start.
 
 **Problem:**
 
-Use **both** queues to run the bank.
+Write two functions that follow the pointers, just like `Traverse()`.
 
-`Arrive(Name)`
+`Search(Item)`
 
-- If there is space **inside**, add the customer to the circular queue and
-  return `"inside"`
-- Otherwise add them to the line **outside** (the linear queue) and return `"outside"`
-- If the line outside is also full, return `"full"`
+- Return the **index** of the node that holds `Item`
+- Return `-1` if `Item` is not in the linked list
 
-`Serve()`
+`CountNodes()`
 
-- Remove the customer at the **front** of the circular queue — they are served
-- If the inside was empty, return `""`
-- If anyone is waiting **outside**, move the person at the front of the line
-  outside **into** the circular queue
-- Return the name of the customer who was served
+- Return how many nodes are in the linked list
 
-Use your functions from Exercises 1 and 2 — `Arrive` and `Serve` must call
-the Enqueue and Dequeue functions of **both** queues.
+**Example (the example list):**
 
-**Example:**
+    Input:                 Output:
+      Search(20)             5
+      Search(40)             4
+      Search(99)             -1
+      CountNodes()           4
 
-    Input:
-      for Name in ["A", "B", "C", "D", "E", "F", "G"]:
-          print(Name, Arrive(Name))
-      print(Serve())
-      print(LinearCount())
-
-    Output:
-      A inside
-      B inside
-      C inside
-      D inside
-      E inside
-      F outside
-      G outside
-      A
-      1
-
-After `A` is served, `F` moves inside. Customers are always served in the
-order they arrived: A, B, C, D, E, F, G.
-
-**Think about it:** the line outside is a **linear** queue. After 8 people in
-total have waited outside, `Arrive()` returns `"full"` when the bank is full —
-even if nobody is waiting outside any more. Why? What would fix it?
+`Search(99)` is `-1`: node 6 still holds `99`, but node 6 is in the free
+list, **not** in the linked list. Only follow pointers from `FirstNode`.
 
 ---
+
+## Exercise 4
+
+**Problem:**
+
+`InsertFront(Item)`
+
+Add `Item` as the new **first** node. Return `True`, or `False` if there are no
+free nodes.
+
+1. If there are no free nodes, return `False`
+2. Take the first free node: `NewNode = FirstEmpty`
+3. Move `FirstEmpty` to the next free node — **before** you change `NewNode`'s pointer!
+4. Store `Item` in the new node, and point it to the old first node
+5. The new node is now the first node: `FirstNode = NewNode`
+
+**Example (the example list):**
+
+    Input:
+      print(InsertFront(5))
+      print(Traverse())
+      print(FirstNode, FirstEmpty)
+
+    Output:
+      True
+      [5, 10, 20, 30, 40]
+      1 3
+
+Node 1 is now `[5, 2]` — it holds 5 and points to node 2 (the old first node).
+
+---
+
+## Exercise 5
+
+**Problem:**
+
+`InsertEnd(Item)`
+
+Add `Item` as the new **last** node. Return `True`, or `False` if there are no
+free nodes.
+
+1. If there are no free nodes, return `False`
+2. Take the first free node and move `FirstEmpty` on (like Exercise 4)
+3. Store `Item` in the new node, and set its pointer to `-1` — it will be last
+4. If the list was **empty**, the new node becomes `FirstNode`
+5. Otherwise follow the pointers to the **last** node (the one whose pointer
+   is `-1`), and point it to the new node
+
+**Example (the example list):**
+
+    Input:
+      print(InsertEnd(50))
+      print(Traverse())
+
+    Output:
+      True
+      [10, 20, 30, 40, 50]
+
+Node 1 is now `[50, -1]`, and node 4 (holding 40) changed from `[40, -1]` to `[40, 1]`.
+
