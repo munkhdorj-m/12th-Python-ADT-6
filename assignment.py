@@ -46,3 +46,8 @@ def InsertEnd(Item):
     # Write your code here
     pass
 
+
+# Exercise 6
+def Delete(Item):
+    # Write your code here
+    pass
