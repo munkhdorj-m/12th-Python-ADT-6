@@ -1,58 +1,48 @@
 # You can remove 'pass' if you written code in the function
-# Do NOT use .append() or .pop() inside the Enqueue and Dequeue functions - move the pointers yourself.
+# Each node is a list: [Data, Pointer]. A pointer of -1 means "points to nothing".
 
-# Exercise 1 - Linear queue
-LinearQueue = []
-LinearHead = -1
-LinearTail = -1
-# Write code here to fill LinearQueue with 8 elements, all "" (empty string)
+# Exercise 1
+LinkedList = []
+FirstNode = -1
+FirstEmpty = 0
+# Write code here to fill LinkedList with 8 nodes (see README)
 
 
-def LinearEnqueue(Name):
+def IsEmpty():
     # Write your code here
     pass
 
 
-def LinearDequeue():
+def IsFull():
     # Write your code here
     pass
 
 
-def LinearCount():
+# Exercise 2
+def Traverse():
     # Write your code here
     pass
 
 
-# Exercise 2 - Circular queue
-CircularQueue = []
-CircularHead = -1
-CircularTail = -1
-NumberItems = 0
-# Write code here to fill CircularQueue with 5 elements, all "" (empty string)
-
-
-def CircularEnqueue(Name):
+# Exercise 3
+def Search(Item):
     # Write your code here
     pass
 
 
-def CircularDequeue():
+def CountNodes():
     # Write your code here
     pass
 
 
-def GetItem(Position):
+# Exercise 4
+def InsertFront(Item):
     # Write your code here
     pass
 
 
-# Exercise 3 - The bank
-def Arrive(Name):
-    # Write your code here
-    pass
-
-
-def Serve():
+# Exercise 5
+def InsertEnd(Item):
     # Write your code here
     pass
 
