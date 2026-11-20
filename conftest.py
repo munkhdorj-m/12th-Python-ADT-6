@@ -3,17 +3,21 @@
 import pytest
 
 HINTS = [
+    ["Timeout",
+     "Your code got stuck in a loop that never ends.\n"
+     "  - Does your loop move on with  Current = LinkedList[Current][1] ?\n"
+     "  - Does it stop when Current is -1?\n"
+     "  - Did a node end up pointing to itself (or back to an earlier node)?"],
+
     ["local variable",
      "Your function changes a global variable without saying so.\n"
-     "Add a global line at the top of the function, for example:\n"
-     "    global LinearQueue, LinearHead, LinearTail\n"
-     "    global CircularQueue, CircularHead, CircularTail, NumberItems"],
+     "Add this line at the top of the function:\n"
+     "    global LinkedList, FirstNode, FirstEmpty"],
 
     ["index out of range",
      "You used an index outside the array.\n"
-     "  - Did you fill LinearQueue with 8 and CircularQueue with 5 elements?\n"
-     "  - Does each Enqueue check for full BEFORE moving the tail?\n"
-     "  - Circular queue: does each pointer go back to 0 when it reaches 5?"],
+     "  - Did you fill LinkedList with 8 nodes at the start?\n"
+     "  - Check for full (FirstEmpty == -1) BEFORE taking a free node."],
 
     ["'NoneType' object",
      "Something is None (nothing). A function probably forgot to 'return'\n"
