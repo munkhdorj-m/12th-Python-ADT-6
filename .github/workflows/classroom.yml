@@ -28,198 +28,198 @@ jobs:
       - name: Install pytest
         run: pip install -r requirements.txt
 
-      - name: Ex 1 - Queue set up
-        id: ex1_initial_queue
+      - name: Ex 1 - List set up
+        id: ex1_initial_list
         uses: classroom-resources/autograding-command-grader@v1
         with:
-          test-name: Ex 1 - Queue set up
-          command: pytest test_assignment.py::test1_initial_queue
+          test-name: Ex 1 - List set up
+          command: pytest test_assignment.py::test1_initial_list
           timeout: 2
           max-score: 1
 
-      - name: Ex 1 - LinearEnqueue
-        id: ex1_enqueue
+      - name: Ex 1 - Rows are separate
+        id: ex1_rows_are_separate
         uses: classroom-resources/autograding-command-grader@v1
         with:
-          test-name: Ex 1 - LinearEnqueue
-          command: pytest test_assignment.py::test1_enqueue
+          test-name: Ex 1 - Rows are separate
+          command: pytest test_assignment.py::test1_rows_are_separate
           timeout: 2
           max-score: 1
 
-      - name: Ex 1 - LinearEnqueue when full
-        id: ex1_enqueue_when_full
+      - name: Ex 1 - IsEmpty
+        id: ex1_is_empty
         uses: classroom-resources/autograding-command-grader@v1
         with:
-          test-name: Ex 1 - LinearEnqueue when full
-          command: pytest test_assignment.py::test1_enqueue_when_full
+          test-name: Ex 1 - IsEmpty
+          command: pytest test_assignment.py::test1_is_empty
           timeout: 2
           max-score: 1
 
-      - name: Ex 1 - LinearDequeue
-        id: ex1_dequeue
+      - name: Ex 1 - IsFull
+        id: ex1_is_full
         uses: classroom-resources/autograding-command-grader@v1
         with:
-          test-name: Ex 1 - LinearDequeue
-          command: pytest test_assignment.py::test1_dequeue
+          test-name: Ex 1 - IsFull
+          command: pytest test_assignment.py::test1_is_full
           timeout: 2
           max-score: 1
 
-      - name: Ex 1 - LinearDequeue when empty
-        id: ex1_dequeue_when_empty
+      - name: Ex 2 - Traverse
+        id: ex2_traverse
         uses: classroom-resources/autograding-command-grader@v1
         with:
-          test-name: Ex 1 - LinearDequeue when empty
-          command: pytest test_assignment.py::test1_dequeue_when_empty
+          test-name: Ex 2 - Traverse
+          command: pytest test_assignment.py::test2_traverse
           timeout: 2
           max-score: 1
 
-      - name: Ex 1 - LinearCount
-        id: ex1_count
+      - name: Ex 2 - Traverse empty
+        id: ex2_traverse_empty
         uses: classroom-resources/autograding-command-grader@v1
         with:
-          test-name: Ex 1 - LinearCount
-          command: pytest test_assignment.py::test1_count
+          test-name: Ex 2 - Traverse empty
+          command: pytest test_assignment.py::test2_traverse_empty
           timeout: 2
           max-score: 1
 
-      - name: Ex 1 - Uses pointers
-        id: ex1_uses_pointers
+      - name: Ex 2 - Traverse keeps list
+        id: ex2_traverse_keeps_list
         uses: classroom-resources/autograding-command-grader@v1
         with:
-          test-name: Ex 1 - Uses pointers
-          command: pytest test_assignment.py::test1_uses_pointers
+          test-name: Ex 2 - Traverse keeps list
+          command: pytest test_assignment.py::test2_traverse_keeps_list
           timeout: 2
           max-score: 1
 
-      - name: Ex 2 - Queue set up
-        id: ex2_initial_queue
+      - name: Ex 3 - Search
+        id: ex3_search
         uses: classroom-resources/autograding-command-grader@v1
         with:
-          test-name: Ex 2 - Queue set up
-          command: pytest test_assignment.py::test2_initial_queue
+          test-name: Ex 3 - Search
+          command: pytest test_assignment.py::test3_search
           timeout: 2
           max-score: 1
 
-      - name: Ex 2 - Enqueue and dequeue
-        id: ex2_enqueue_and_dequeue
+      - name: Ex 3 - CountNodes
+        id: ex3_count_nodes
         uses: classroom-resources/autograding-command-grader@v1
         with:
-          test-name: Ex 2 - Enqueue and dequeue
-          command: pytest test_assignment.py::test2_enqueue_and_dequeue
+          test-name: Ex 3 - CountNodes
+          command: pytest test_assignment.py::test3_count_nodes
           timeout: 2
           max-score: 1
 
-      - name: Ex 2 - Wraps around
-        id: ex2_wraps_around
+      - name: Ex 4 - InsertFront empty list
+        id: ex4_insert_front_empty
         uses: classroom-resources/autograding-command-grader@v1
         with:
-          test-name: Ex 2 - Wraps around
-          command: pytest test_assignment.py::test2_wraps_around
+          test-name: Ex 4 - InsertFront empty list
+          command: pytest test_assignment.py::test4_insert_front_empty
           timeout: 2
           max-score: 1
 
-      - name: Ex 2 - Empty resets pointers
-        id: ex2_empty_resets_pointers
+      - name: Ex 4 - InsertFront
+        id: ex4_insert_front_sample
         uses: classroom-resources/autograding-command-grader@v1
         with:
-          test-name: Ex 2 - Empty resets pointers
-          command: pytest test_assignment.py::test2_empty_resets_pointers
+          test-name: Ex 4 - InsertFront
+          command: pytest test_assignment.py::test4_insert_front_sample
           timeout: 2
           max-score: 1
 
-      - name: Ex 2 - GetItem
-        id: ex2_get_item
+      - name: Ex 4 - InsertFront when full
+        id: ex4_insert_front_when_full
         uses: classroom-resources/autograding-command-grader@v1
         with:
-          test-name: Ex 2 - GetItem
-          command: pytest test_assignment.py::test2_get_item
+          test-name: Ex 4 - InsertFront when full
+          command: pytest test_assignment.py::test4_insert_front_when_full
           timeout: 2
           max-score: 1
 
-      - name: Ex 2 - GetItem after wrap
-        id: ex2_get_item_after_wrap
+      - name: Ex 5 - InsertEnd empty list
+        id: ex5_insert_end_empty
         uses: classroom-resources/autograding-command-grader@v1
         with:
-          test-name: Ex 2 - GetItem after wrap
-          command: pytest test_assignment.py::test2_get_item_after_wrap
+          test-name: Ex 5 - InsertEnd empty list
+          command: pytest test_assignment.py::test5_insert_end_empty
           timeout: 2
           max-score: 1
 
-      - name: Ex 2 - Uses pointers
-        id: ex2_uses_pointers
+      - name: Ex 5 - InsertEnd
+        id: ex5_insert_end_sample
         uses: classroom-resources/autograding-command-grader@v1
         with:
-          test-name: Ex 2 - Uses pointers
-          command: pytest test_assignment.py::test2_uses_pointers
+          test-name: Ex 5 - InsertEnd
+          command: pytest test_assignment.py::test5_insert_end_sample
           timeout: 2
           max-score: 1
 
-      - name: Ex 3 - Arrive
-        id: ex3_arrive
+      - name: Ex 5 - InsertEnd when full
+        id: ex5_insert_end_when_full
         uses: classroom-resources/autograding-command-grader@v1
         with:
-          test-name: Ex 3 - Arrive
-          command: pytest test_assignment.py::test3_arrive
+          test-name: Ex 5 - InsertEnd when full
+          command: pytest test_assignment.py::test5_insert_end_when_full
           timeout: 2
           max-score: 1
 
-      - name: Ex 3 - Serve order
-        id: ex3_serve_order
+      - name: Ex 6 - Delete middle and last
+        id: ex6_delete_middle_and_last
         uses: classroom-resources/autograding-command-grader@v1
         with:
-          test-name: Ex 3 - Serve order
-          command: pytest test_assignment.py::test3_serve_order
+          test-name: Ex 6 - Delete middle and last
+          command: pytest test_assignment.py::test6_delete_middle_and_last
           timeout: 2
           max-score: 1
 
-      - name: Ex 3 - Serve when empty
-        id: ex3_serve_when_empty
+      - name: Ex 6 - Delete first
+        id: ex6_delete_first
         uses: classroom-resources/autograding-command-grader@v1
         with:
-          test-name: Ex 3 - Serve when empty
-          command: pytest test_assignment.py::test3_serve_when_empty
+          test-name: Ex 6 - Delete first
+          command: pytest test_assignment.py::test6_delete_first
           timeout: 2
           max-score: 1
 
-      - name: Ex 3 - Outside line is linear
-        id: ex3_outside_line_is_linear
+      - name: Ex 6 - Not found
+        id: ex6_not_found
         uses: classroom-resources/autograding-command-grader@v1
         with:
-          test-name: Ex 3 - Outside line is linear
-          command: pytest test_assignment.py::test3_outside_line_is_linear
+          test-name: Ex 6 - Not found
+          command: pytest test_assignment.py::test6_not_found
           timeout: 2
           max-score: 1
 
-      - name: Ex 3 - Uses both queues
-        id: ex3_uses_both_queues
+      - name: Ex 6 - Back to free list
+        id: ex6_node_goes_back_to_free_list
         uses: classroom-resources/autograding-command-grader@v1
         with:
-          test-name: Ex 3 - Uses both queues
-          command: pytest test_assignment.py::test3_uses_both_queues
+          test-name: Ex 6 - Back to free list
+          command: pytest test_assignment.py::test6_node_goes_back_to_free_list
           timeout: 2
           max-score: 1
 
       - name: Autograding Reporter
         uses: classroom-resources/autograding-grading-reporter@v1
         env:
-          EX1_INITIAL_QUEUE_RESULTS: "${{ steps.ex1_initial_queue.outputs.result }}"
-          EX1_ENQUEUE_RESULTS: "${{ steps.ex1_enqueue.outputs.result }}"
-          EX1_ENQUEUE_WHEN_FULL_RESULTS: "${{ steps.ex1_enqueue_when_full.outputs.result }}"
-          EX1_DEQUEUE_RESULTS: "${{ steps.ex1_dequeue.outputs.result }}"
-          EX1_DEQUEUE_WHEN_EMPTY_RESULTS: "${{ steps.ex1_dequeue_when_empty.outputs.result }}"
-          EX1_COUNT_RESULTS: "${{ steps.ex1_count.outputs.result }}"
-          EX1_USES_POINTERS_RESULTS: "${{ steps.ex1_uses_pointers.outputs.result }}"
-          EX2_INITIAL_QUEUE_RESULTS: "${{ steps.ex2_initial_queue.outputs.result }}"
-          EX2_ENQUEUE_AND_DEQUEUE_RESULTS: "${{ steps.ex2_enqueue_and_dequeue.outputs.result }}"
-          EX2_WRAPS_AROUND_RESULTS: "${{ steps.ex2_wraps_around.outputs.result }}"
-          EX2_EMPTY_RESETS_POINTERS_RESULTS: "${{ steps.ex2_empty_resets_pointers.outputs.result }}"
-          EX2_GET_ITEM_RESULTS: "${{ steps.ex2_get_item.outputs.result }}"
-          EX2_GET_ITEM_AFTER_WRAP_RESULTS: "${{ steps.ex2_get_item_after_wrap.outputs.result }}"
-          EX2_USES_POINTERS_RESULTS: "${{ steps.ex2_uses_pointers.outputs.result }}"
-          EX3_ARRIVE_RESULTS: "${{ steps.ex3_arrive.outputs.result }}"
-          EX3_SERVE_ORDER_RESULTS: "${{ steps.ex3_serve_order.outputs.result }}"
-          EX3_SERVE_WHEN_EMPTY_RESULTS: "${{ steps.ex3_serve_when_empty.outputs.result }}"
-          EX3_OUTSIDE_LINE_IS_LINEAR_RESULTS: "${{ steps.ex3_outside_line_is_linear.outputs.result }}"
-          EX3_USES_BOTH_QUEUES_RESULTS: "${{ steps.ex3_uses_both_queues.outputs.result }}"
+          EX1_INITIAL_LIST_RESULTS: "${{ steps.ex1_initial_list.outputs.result }}"
+          EX1_ROWS_ARE_SEPARATE_RESULTS: "${{ steps.ex1_rows_are_separate.outputs.result }}"
+          EX1_IS_EMPTY_RESULTS: "${{ steps.ex1_is_empty.outputs.result }}"
+          EX1_IS_FULL_RESULTS: "${{ steps.ex1_is_full.outputs.result }}"
+          EX2_TRAVERSE_RESULTS: "${{ steps.ex2_traverse.outputs.result }}"
+          EX2_TRAVERSE_EMPTY_RESULTS: "${{ steps.ex2_traverse_empty.outputs.result }}"
+          EX2_TRAVERSE_KEEPS_LIST_RESULTS: "${{ steps.ex2_traverse_keeps_list.outputs.result }}"
+          EX3_SEARCH_RESULTS: "${{ steps.ex3_search.outputs.result }}"
+          EX3_COUNT_NODES_RESULTS: "${{ steps.ex3_count_nodes.outputs.result }}"
+          EX4_INSERT_FRONT_EMPTY_RESULTS: "${{ steps.ex4_insert_front_empty.outputs.result }}"
+          EX4_INSERT_FRONT_SAMPLE_RESULTS: "${{ steps.ex4_insert_front_sample.outputs.result }}"
+          EX4_INSERT_FRONT_WHEN_FULL_RESULTS: "${{ steps.ex4_insert_front_when_full.outputs.result }}"
+          EX5_INSERT_END_EMPTY_RESULTS: "${{ steps.ex5_insert_end_empty.outputs.result }}"
+          EX5_INSERT_END_SAMPLE_RESULTS: "${{ steps.ex5_insert_end_sample.outputs.result }}"
+          EX5_INSERT_END_WHEN_FULL_RESULTS: "${{ steps.ex5_insert_end_when_full.outputs.result }}"
+          EX6_DELETE_MIDDLE_AND_LAST_RESULTS: "${{ steps.ex6_delete_middle_and_last.outputs.result }}"
+          EX6_DELETE_FIRST_RESULTS: "${{ steps.ex6_delete_first.outputs.result }}"
+          EX6_NOT_FOUND_RESULTS: "${{ steps.ex6_not_found.outputs.result }}"
+          EX6_NODE_GOES_BACK_TO_FREE_LIST_RESULTS: "${{ steps.ex6_node_goes_back_to_free_list.outputs.result }}"
         with:
-          runners: ex1_initial_queue,ex1_enqueue,ex1_enqueue_when_full,ex1_dequeue,ex1_dequeue_when_empty,ex1_count,ex1_uses_pointers,ex2_initial_queue,ex2_enqueue_and_dequeue,ex2_wraps_around,ex2_empty_resets_pointers,ex2_get_item,ex2_get_item_after_wrap,ex2_uses_pointers,ex3_arrive,ex3_serve_order,ex3_serve_when_empty,ex3_outside_line_is_linear,ex3_uses_both_queues
+          runners: ex1_initial_list,ex1_rows_are_separate,ex1_is_empty,ex1_is_full,ex2_traverse,ex2_traverse_empty,ex2_traverse_keeps_list,ex3_search,ex3_count_nodes,ex4_insert_front_empty,ex4_insert_front_sample,ex4_insert_front_when_full,ex5_insert_end_empty,ex5_insert_end_sample,ex5_insert_end_when_full,ex6_delete_middle_and_last,ex6_delete_first,ex6_not_found,ex6_node_goes_back_to_free_list
