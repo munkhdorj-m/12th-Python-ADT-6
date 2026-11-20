@@ -1,7 +1,4 @@
-import ast
 import importlib
-import inspect
-import textwrap
 
 import pytest
 
@@ -13,240 +10,237 @@ def q():
     return importlib.reload(assignment)
 
 
-def calls_in(function):
-    tree = ast.parse(textwrap.dedent(inspect.getsource(function)))
-    names = []
-    for node in ast.walk(tree):
-        if isinstance(node, ast.Call):
-            if isinstance(node.func, ast.Name):
-                names.append(node.func.id)
-            if isinstance(node.func, ast.Attribute):
-                names.append("." + node.func.attr)
-    return names
+SAMPLE = [
+    [30, 4],
+    [-1, 3],
+    [10, 5],
+    [-1, 6],
+    [40, -1],
+    [20, 0],
+    [99, 7],
+    [-1, -1],
+]
 
 
-def check_no_list_methods(function):
-    for name in calls_in(function):
-        if name in [".append", ".pop", ".insert", ".remove", ".extend", ".clear"]:
-            pytest.fail(
-                function.__name__ + "() uses " + name + "(). "
-                "Move the pointers yourself and store with Queue[pointer] = ..."
-            )
+def build(q, nodes, first, empty):
+    q.LinkedList = []
+    for node in nodes:
+        q.LinkedList.append([node[0], node[1]])
+    q.FirstNode = first
+    q.FirstEmpty = empty
 
 
-def test1_initial_queue(q):
-    assert q.LinearQueue == ["", "", "", "", "", "", "", ""]
-    assert q.LinearHead == -1
-    assert q.LinearTail == -1
+def build_sample(q):
+    build(q, SAMPLE, 2, 1)
 
 
-def test1_enqueue(q):
-    assert q.LinearEnqueue("Bat") == True
-    assert q.LinearHead == 0
-    assert q.LinearTail == 0
-    assert q.LinearQueue[0] == "Bat"
-    assert q.LinearEnqueue("Saraa") == True
-    assert q.LinearHead == 0
-    assert q.LinearTail == 1
-    assert q.LinearQueue[1] == "Saraa"
-
-
-def test1_enqueue_when_full(q):
-    for name in ["A", "B", "C", "D", "E", "F", "G", "H"]:
-        assert q.LinearEnqueue(name) == True
-    assert q.LinearEnqueue("I") == False
-    assert q.LinearTail == 7
-    assert q.LinearQueue == ["A", "B", "C", "D", "E", "F", "G", "H"]
-
-
-def test1_dequeue(q):
-    q.LinearEnqueue("Bat")
-    q.LinearEnqueue("Saraa")
-    q.LinearEnqueue("Anu")
-    assert q.LinearDequeue() == "Bat"
-    assert q.LinearHead == 1
-    assert q.LinearDequeue() == "Saraa"
-    assert q.LinearDequeue() == "Anu"
-
-
-def test1_dequeue_when_empty(q):
-    assert q.LinearDequeue() == ""
-    q.LinearEnqueue("Bat")
-    q.LinearDequeue()
-    assert q.LinearDequeue() == ""
-
-
-def test1_count(q):
-    assert q.LinearCount() == 0
-    q.LinearEnqueue("A")
-    q.LinearEnqueue("B")
-    q.LinearEnqueue("C")
-    assert q.LinearCount() == 3
-    q.LinearDequeue()
-    assert q.LinearCount() == 2
-    q.LinearDequeue()
-    q.LinearDequeue()
-    assert q.LinearCount() == 0
-    assert q.LinearDequeue() == ""
-    assert q.LinearCount() == 0
-
-
-def test1_uses_pointers(q):
-    check_no_list_methods(q.LinearEnqueue)
-    check_no_list_methods(q.LinearDequeue)
-    for x in range(10):
-        q.LinearEnqueue("P" + str(x))
-    for x in range(10):
-        q.LinearDequeue()
-    assert len(q.LinearQueue) == 8
-    assert q.LinearTail == 7
-
-
-def test2_initial_queue(q):
-    assert q.CircularQueue == ["", "", "", "", ""]
-    assert q.CircularHead == -1
-    assert q.CircularTail == -1
-    assert q.NumberItems == 0
-
-
-def test2_enqueue_and_dequeue(q):
-    assert q.CircularEnqueue("Bat") == True
-    assert q.CircularHead == 0
-    assert q.CircularTail == 0
-    assert q.NumberItems == 1
-    assert q.CircularEnqueue("Saraa") == True
-    assert q.CircularEnqueue("Anu") == True
-    assert q.NumberItems == 3
-    assert q.CircularDequeue() == "Bat"
-    assert q.CircularHead == 1
-    assert q.NumberItems == 2
-    assert q.CircularDequeue() == "Saraa"
-
-
-def test2_wraps_around(q):
-    for name in ["A", "B", "C", "D", "E"]:
-        assert q.CircularEnqueue(name) == True
-    assert q.CircularEnqueue("X") == False
-    assert q.CircularDequeue() == "A"
-    assert q.CircularDequeue() == "B"
-    assert q.CircularEnqueue("F") == True
-    assert q.CircularTail == 0
-    assert q.CircularQueue[0] == "F"
-    assert q.CircularEnqueue("G") == True
-    assert q.CircularTail == 1
-    assert q.CircularEnqueue("H") == False
-    result = []
-    for x in range(5):
-        result.append(q.CircularDequeue())
-    assert result == ["C", "D", "E", "F", "G"]
-
-
-def test2_empty_resets_pointers(q):
-    assert q.CircularDequeue() == ""
-    q.CircularEnqueue("Bat")
-    q.CircularEnqueue("Saraa")
-    q.CircularDequeue()
-    q.CircularDequeue()
-    assert q.NumberItems == 0
-    assert q.CircularHead == -1
-    assert q.CircularTail == -1
-    assert q.CircularDequeue() == ""
-
-
-def test2_get_item(q):
-    assert q.GetItem(0) == ""
-    q.CircularEnqueue("Bat")
-    q.CircularEnqueue("Saraa")
-    q.CircularEnqueue("Anu")
-    assert q.GetItem(0) == "Bat"
-    assert q.GetItem(1) == "Saraa"
-    assert q.GetItem(2) == "Anu"
-    assert q.GetItem(3) == ""
-    assert q.GetItem(-1) == ""
-    assert q.NumberItems == 3
-    assert q.CircularHead == 0
-
-
-def test2_get_item_after_wrap(q):
-    for name in ["A", "B", "C", "D", "E"]:
-        q.CircularEnqueue(name)
-    q.CircularDequeue()
-    q.CircularDequeue()
-    q.CircularDequeue()
-    q.CircularEnqueue("F")
-    q.CircularEnqueue("G")
-    assert q.GetItem(0) == "D"
-    assert q.GetItem(1) == "E"
-    assert q.GetItem(2) == "F"
-    assert q.GetItem(3) == "G"
-    assert q.GetItem(4) == ""
-    assert q.CircularDequeue() == "D"
-
-
-def test2_uses_pointers(q):
-    check_no_list_methods(q.CircularEnqueue)
-    check_no_list_methods(q.CircularDequeue)
-    for x in range(20):
-        q.CircularEnqueue("P" + str(x))
-        q.CircularDequeue()
-    assert len(q.CircularQueue) == 5
-    assert q.NumberItems == 0
-
-
-def test3_arrive(q):
-    for name in ["A", "B", "C", "D", "E"]:
-        assert q.Arrive(name) == "inside"
-    assert q.Arrive("F") == "outside"
-    assert q.Arrive("G") == "outside"
-    assert q.NumberItems == 5
-    assert q.LinearCount() == 2
-
-
-def test3_serve_order(q):
-    for name in ["A", "B", "C", "D", "E", "F", "G"]:
-        q.Arrive(name)
-    assert q.Serve() == "A"
-    assert q.NumberItems == 5
-    assert q.LinearCount() == 1
-    assert q.CircularQueue[q.CircularTail] == "F"
-    assert q.Serve() == "B"
-    assert q.LinearCount() == 0
-    served = []
-    for x in range(5):
-        served.append(q.Serve())
-    assert served == ["C", "D", "E", "F", "G"]
-    assert q.NumberItems == 0
-
-
-def test3_serve_when_empty(q):
-    assert q.Serve() == ""
-    q.Arrive("A")
-    assert q.Serve() == "A"
-    assert q.Serve() == ""
-
-
-def test3_outside_line_is_linear(q):
-    for x in range(13):
-        assert q.Arrive("P" + str(x)) in ["inside", "outside"]
-    assert q.Arrive("P13") == "full"
+def build_full(q):
+    nodes = []
     for x in range(8):
-        q.Serve()
-    assert q.NumberItems == 5
-    assert q.LinearCount() == 0
-    for x in range(5):
-        q.Serve()
-    assert q.Arrive("Late1") == "inside"
-    for x in range(4):
-        q.Arrive("Late" + str(x + 2))
-    assert q.Arrive("Late6") == "full"
+        nodes.append([(x + 1) * 10, x + 1])
+    nodes[7][1] = -1
+    build(q, nodes, 0, -1)
 
 
-def test3_uses_both_queues(q):
-    arrive_calls = calls_in(q.Arrive)
-    serve_calls = calls_in(q.Serve)
-    assert "CircularEnqueue" in arrive_calls, "Arrive() must call CircularEnqueue()."
-    assert "LinearEnqueue" in arrive_calls, "Arrive() must call LinearEnqueue()."
-    assert "CircularDequeue" in serve_calls, "Serve() must call CircularDequeue()."
-    assert "LinearDequeue" in serve_calls, "Serve() must call LinearDequeue()."
-    q.Arrive("A")
-    assert q.Serve() == "A"
+def walk(q, start):
+    items = []
+    current = start
+    steps = 0
+    while current != -1 and steps < 20:
+        items.append(current)
+        current = q.LinkedList[current][1]
+        steps = steps + 1
+    return items
+
+
+def data_in_list(q):
+    values = []
+    for index in walk(q, q.FirstNode):
+        values.append(q.LinkedList[index][0])
+    return values
+
+
+def test1_initial_list(q):
+    assert q.LinkedList == [
+        [-1, 1],
+        [-1, 2],
+        [-1, 3],
+        [-1, 4],
+        [-1, 5],
+        [-1, 6],
+        [-1, 7],
+        [-1, -1],
+    ]
+    assert q.FirstNode == -1
+    assert q.FirstEmpty == 0
+
+
+def test1_rows_are_separate(q):
+    q.LinkedList[0][0] = 55
+    assert q.LinkedList[1][0] == -1
+    assert q.LinkedList[7][0] == -1
+
+
+def test1_is_empty(q):
+    assert q.IsEmpty() == True
+    build_sample(q)
+    assert q.IsEmpty() == False
+
+
+def test1_is_full(q):
+    assert q.IsFull() == False
+    build_sample(q)
+    assert q.IsFull() == False
+    build_full(q)
+    assert q.IsFull() == True
+
+
+def test2_traverse(q):
+    build_sample(q)
+    assert q.Traverse() == [10, 20, 30, 40]
+
+
+def test2_traverse_empty(q):
+    assert q.Traverse() == []
+    build(q, [[7, -1], [-1, -1]], 0, 1)
+    assert q.Traverse() == [7]
+
+
+def test2_traverse_keeps_list(q):
+    build_sample(q)
+    q.Traverse()
+    q.Traverse()
+    assert q.LinkedList == SAMPLE
+    assert q.FirstNode == 2
+    assert q.FirstEmpty == 1
+    assert q.Traverse() == [10, 20, 30, 40]
+
+
+@pytest.mark.parametrize("item, expected", [
+    [10, 2],
+    [20, 5],
+    [30, 0],
+    [40, 4],
+    [99, -1],
+    [7, -1],
+])
+def test3_search(q, item, expected):
+    build_sample(q)
+    assert q.Search(item) == expected
+
+
+def test3_count_nodes(q):
+    assert q.CountNodes() == 0
+    build_sample(q)
+    assert q.CountNodes() == 4
+    build(q, [[7, -1], [-1, -1]], 0, 1)
+    assert q.CountNodes() == 1
+    build_full(q)
+    assert q.CountNodes() == 8
+
+
+def test4_insert_front_empty(q):
+    assert q.InsertFront(10) == True
+    assert q.FirstNode == 0
+    assert q.FirstEmpty == 1
+    assert q.LinkedList[0] == [10, -1]
+    assert q.InsertFront(20) == True
+    assert q.FirstNode == 1
+    assert q.FirstEmpty == 2
+    assert q.LinkedList[1] == [20, 0]
+    assert data_in_list(q) == [20, 10]
+
+
+def test4_insert_front_sample(q):
+    build_sample(q)
+    assert q.InsertFront(5) == True
+    assert q.FirstNode == 1
+    assert q.LinkedList[1] == [5, 2]
+    assert q.FirstEmpty == 3
+    assert data_in_list(q) == [5, 10, 20, 30, 40]
+    assert walk(q, q.FirstEmpty) == [3, 6, 7]
+
+
+def test4_insert_front_when_full(q):
+    build_full(q)
+    assert q.InsertFront(5) == False
+    assert q.FirstNode == 0
+    assert data_in_list(q) == [10, 20, 30, 40, 50, 60, 70, 80]
+
+
+def test5_insert_end_empty(q):
+    assert q.InsertEnd(10) == True
+    assert q.FirstNode == 0
+    assert q.FirstEmpty == 1
+    assert q.LinkedList[0] == [10, -1]
+    assert q.InsertEnd(20) == True
+    assert q.LinkedList[0] == [10, 1]
+    assert q.LinkedList[1] == [20, -1]
+    assert data_in_list(q) == [10, 20]
+
+
+def test5_insert_end_sample(q):
+    build_sample(q)
+    assert q.InsertEnd(50) == True
+    assert q.FirstNode == 2
+    assert q.LinkedList[1] == [50, -1]
+    assert q.LinkedList[4] == [40, 1]
+    assert q.FirstEmpty == 3
+    assert data_in_list(q) == [10, 20, 30, 40, 50]
+    assert walk(q, q.FirstEmpty) == [3, 6, 7]
+
+
+def test5_insert_end_when_full(q):
+    build_full(q)
+    assert q.InsertEnd(90) == False
+    assert data_in_list(q) == [10, 20, 30, 40, 50, 60, 70, 80]
+    q2 = importlib.reload(assignment)
+    for x in range(8):
+        assert q2.InsertEnd(x) == True
+    assert q2.InsertEnd(8) == False
+    assert data_in_list(q2) == [0, 1, 2, 3, 4, 5, 6, 7]
+
+
+def test6_delete_middle_and_last(q):
+    build_sample(q)
+    assert q.Delete(30) == True
+    assert q.LinkedList[5] == [20, 4]
+    assert data_in_list(q) == [10, 20, 40]
+    assert q.Delete(40) == True
+    assert q.LinkedList[5] == [20, -1]
+    assert data_in_list(q) == [10, 20]
+
+
+def test6_delete_first(q):
+    build_sample(q)
+    assert q.Delete(10) == True
+    assert q.FirstNode == 5
+    assert data_in_list(q) == [20, 30, 40]
+    assert q.Delete(20) == True
+    assert q.Delete(30) == True
+    assert q.Delete(40) == True
+    assert q.FirstNode == -1
+    assert data_in_list(q) == []
+
+
+def test6_not_found(q):
+    build_sample(q)
+    assert q.Delete(99) == False
+    assert q.Delete(7) == False
+    assert q.LinkedList == SAMPLE
+    assert q.FirstNode == 2
+    assert q.FirstEmpty == 1
+    q2 = importlib.reload(assignment)
+    assert q2.Delete(10) == False
+
+
+def test6_node_goes_back_to_free_list(q):
+    build_sample(q)
+    q.Delete(30)
+    assert q.LinkedList[0] == [-1, 1]
+    assert q.FirstEmpty == 0
+    assert walk(q, q.FirstEmpty) == [0, 1, 3, 6, 7]
+    q.Delete(10)
+    assert q.LinkedList[2] == [-1, 0]
+    assert q.FirstEmpty == 2
+    assert walk(q, q.FirstEmpty) == [2, 0, 1, 3, 6, 7]
